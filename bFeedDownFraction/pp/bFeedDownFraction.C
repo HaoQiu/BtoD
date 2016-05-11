@@ -126,7 +126,7 @@ void bFeedDownFraction()
       TH1D* hD0DcaData = (TH1D*)hD0DcaData0->Clone("hD0DcaData");
       hD0DcaData->Add(hD0DcaSideband,-1);
 
-      if(i==1)
+      if(i==100)
 	{
           c1->cd(1);
           gPad->SetLogy(0);
@@ -357,10 +357,12 @@ void bFeedDownFraction()
   hStupidJie->SetStats(0);
   hStupidJie->Draw();
   TGraphErrors* grFraction = new TGraphErrors(nPtBins, pts, promptFraction, 0, promptFractionError);
+  grFraction->SetName("grPromptFraction");
   grFraction->SetMarkerStyle(20);
   grFraction->Draw("psame");
 
   TGraphErrors* grFraction2 = new TGraphErrors(nPtBins, pts, promptFraction, 0, promptFractionErrorDataOnly);
+  grFraction2->SetName("grPromptFractionErrorFromRealDataOnly");
   grFraction2->SetMarkerStyle(20);
   grFraction2->SetMarkerColor(4);
   grFraction2->SetLineColor(4);
@@ -391,6 +393,13 @@ void bFeedDownFraction()
   hBtoDRawYield->Draw("p");
   
   c2->SaveAs("BtoD.pdf");
+
+  TFile* fOut = new TFile("bFeedDownResult.root", "recreate");
+  fOut->WriteTObject(grFraction);
+  fOut->WriteTObject(grFraction2);
+  fOut->WriteTObject(hBtoDRawYield);
+  fOut->Write();
+  fOut->Close();
 }
 
 Double_t funMix(Double_t* x_, Double_t* para)
