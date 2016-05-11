@@ -31,10 +31,16 @@ void bFeedDownFraction()
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
-  TCanvas* c1 = new TCanvas("c1","",800,900);
-  c1->Divide(2,3);
+  TCanvas* c4 = new TCanvas("c4","",800,600);
+  c4->Divide(2,2);
    
-  TCanvas* c2 = new TCanvas();
+  TCanvas* c2 = new TCanvas("c2","",400,600);
+  c2->Divide(1,2);
+
+  TCanvas* c1 = new TCanvas();
+
+  TCanvas* c15 = new TCanvas("c15","",810,1000);
+  c15->Divide(3,5);
 
   TFile* fPbPb = new TFile("bFeedDownPbPb.hist.root");
   TFile* fPbPbMB = new TFile("bFeedDownPbPbMB.hist.root");
@@ -45,17 +51,17 @@ void bFeedDownFraction()
   TH3D* hSidebandPbPb = (TH3D*)fPbPb->Get("hSideband");
   TH3D* hDataPbPbMB = (TH3D*)fPbPbMB->Get("hData");
   TH3D* hSidebandPbPbMB = (TH3D*)fPbPbMB->Get("hSideband");
-  TH2D* hPtMPbPb = (TH2D*)fPbPb->Get("hPtM");
-  TH2D* hPtMPbPbMB = (TH2D*)fPbPbMB->Get("hPtM");
+  TH3D* hPtMD0DcaPbPb = (TH3D*)fPbPb->Get("hPtMD0Dca");
+  TH3D* hPtMD0DcaPbPbMB = (TH3D*)fPbPbMB->Get("hPtMD0Dca");
 
   TH3D* hMCPSignalPbPb = (TH3D*)fPbPbMC->Get("hMCPSignal");
   TH3D* hMCNPSignalPbPb = (TH3D*)fPbPbMC->Get("hMCNPSignal");
   TH3D* hMCPSignalPbPbMB = (TH3D*)fPbPbMBMC->Get("hMCPSignal");
   TH3D* hMCNPSignalPbPbMB = (TH3D*)fPbPbMBMC->Get("hMCNPSignal");
-  TH2D* hPtMMCPSignalPbPb = (TH2D*)fPbPbMC->Get("hPtMMCPSignal");
-  TH2D* hPtMMCPSwappedPbPb = (TH2D*)fPbPbMC->Get("hPtMMCPSwapped");
-  TH2D* hPtMMCPSignalPbPbMB =(TH2D*)fPbPbMBMC->Get("hPtMMCPSignal");
-  TH2D* hPtMMCPSwappedPbPbMB = (TH2D*)fPbPbMBMC->Get("hPtMMCPSwapped");
+  TH3D* hPtMD0DcaMCPSignalPbPb = (TH3D*)fPbPbMC->Get("hPtMD0DcaMCPSignal");
+  TH3D* hPtMD0DcaMCPSwappedPbPb = (TH3D*)fPbPbMC->Get("hPtMD0DcaMCPSwapped");
+  TH3D* hPtMD0DcaMCPSignalPbPbMB =(TH3D*)fPbPbMBMC->Get("hPtMD0DcaMCPSignal");
+  TH3D* hPtMD0DcaMCPSwappedPbPbMB = (TH3D*)fPbPbMBMC->Get("hPtMD0DcaMCPSwapped");
 
   TH3D* hData = (TH3D*)hDataPbPb->Clone("hData");
   hData->Sumw2();
@@ -65,9 +71,9 @@ void bFeedDownFraction()
   hSideband->Sumw2();
   hSideband->Add(hSidebandPbPbMB);
 
-  TH2D* hPtM = (TH2D*)hPtMPbPb->Clone("hPtM");
-  hPtM->Sumw2();
-  hPtM->Add(hPtMPbPbMB);
+  TH3D* hPtMD0Dca = (TH3D*)hPtMD0DcaPbPb->Clone("hPtMD0Dca");
+  hPtMD0Dca->Sumw2();
+  hPtMD0Dca->Add(hPtMD0DcaPbPbMB);
 
   TH3D* hMCPSignal = (TH3D*)hMCPSignalPbPb->Clone("hMCPSignal");
   hMCPSignal->Sumw2();
@@ -77,13 +83,13 @@ void bFeedDownFraction()
   hMCNPSignal->Sumw2();
   hMCNPSignal->Add(hMCNPSignalPbPbMB);
 
-  TH2D* hPtMMCPSignal = (TH2D*)hPtMMCPSignalPbPb->Clone("hPtMMCPSignal");
-  hPtMMCPSignal->Sumw2();
-  hPtMMCPSignal->Add(hPtMMCPSignalPbPbMB);
+  TH3D* hPtMD0DcaMCPSignal = (TH3D*)hPtMD0DcaMCPSignalPbPb->Clone("hPtMD0DcaMCPSignal");
+  hPtMD0DcaMCPSignal->Sumw2();
+  hPtMD0DcaMCPSignal->Add(hPtMD0DcaMCPSignalPbPbMB);
 
-  TH2D* hPtMMCPSwapped =(TH2D*)hPtMMCPSwappedPbPb->Clone("hPtMMCPSwapped");
-  hPtMMCPSwapped->Sumw2();
-  hPtMMCPSwapped->Add(hPtMMCPSwappedPbPbMB);
+  TH3D* hPtMD0DcaMCPSwapped =(TH3D*)hPtMD0DcaMCPSwappedPbPb->Clone("hPtMD0DcaMCPSwapped");
+  hPtMD0DcaMCPSwapped->Sumw2();
+  hPtMD0DcaMCPSwapped->Add(hPtMD0DcaMCPSwappedPbPbMB);
 
   expMCPSignal = new TF1("expMCPSignal","[0]*exp([1]*x)");
   expMCPSignal->SetLineColor(kBlack);
@@ -114,7 +120,17 @@ void bFeedDownFraction()
   float bToDYield[nPtBins];
   float bToDYieldError[nPtBins];
 
-  for(int i=5; i<=nPtBins; i++)
+  const int nBinY = 14;
+  Float_t binsY[nBinY+1];
+  float firstBinYWidth = 0.001;
+  float binYWidthRatio = 1.27;
+  binsY[0]=0;
+  for(int i=1; i<=nBinY; i++)
+    binsY[i] = binsY[i-1]+firstBinYWidth*pow(binYWidthRatio,i-1);
+  cout<<"last y bin: "<<binsY[nBinY]<<endl;
+
+
+  for(int i=1; i<=nPtBins; i++)
     {
       pts[i-1] = hData->GetXaxis()->GetBinCenter(i);
       float ptLow = hData->GetXaxis()->GetBinLowEdge(i);
@@ -140,11 +156,15 @@ void bFeedDownFraction()
       texY->SetTextSize(0.06);
       texY->SetLineWidth(2);
 
-      c1->cd(1);
+      c2->cd(1);
 
-      TH1D* hMData = hPtM->ProjectionY(Form("hM_%1.1f_%1.1f", ptLow, ptHigh), i, i);
-      TH1D* hMMCSignal = hPtMMCPSignal->ProjectionY("hMMCSignal", i, i);
-      TH1D* hMMCSwapped = hPtMMCPSwapped->ProjectionY("hMMCSwapped", i, i);
+      hPtMD0Dca->GetZaxis()->SetRange(1,100);
+      hPtMD0Dca->GetXaxis()->SetRange(i,i);
+      hPtMD0DcaMCPSignal->GetXaxis()->SetRange(i,i);
+      hPtMD0DcaMCPSwapped->GetXaxis()->SetRange(i,i);
+      TH1D* hMData = (TH1D*)hPtMD0Dca->Project3D("y")->Clone(Form("hM_%1.1f_%1.1f", ptLow, ptHigh));
+      TH1D* hMMCSignal = (TH1D*)hPtMD0DcaMCPSignal->Project3D("y");
+      TH1D* hMMCSwapped = (TH1D*)hPtMD0DcaMCPSwapped->Project3D("y");
 
       setColorTitleLabel(hMData);
       TF1* fMass = fitMass(hMData, hMMCSignal, hMMCSwapped);
@@ -170,9 +190,28 @@ void bFeedDownFraction()
 
       float scaleSideBand = background->Integral(massSignal1, massSignal2)/(background->Integral(massSideBand1, massSideBand2)+background->Integral(massSideBand3, massSideBand4));
       cout<<"scaleSideBand: "<<scaleSideBand<<endl;
-      scaleSideBand=1.14;
 
-      c1->cd(2);
+      TLatex* texScale = new TLatex(0.18,0.66,Form("side band scale: %1.3f", scaleSideBand));
+      texScale->SetNDC();
+      texScale->SetTextFont(42);
+      texScale->SetTextSize(0.06);
+      texScale->SetLineWidth(2);
+      texScale->Draw();
+
+      TLine* lineSignal1 = new TLine(massSignal1, 0, massSignal1, hMData->GetMaximum()*0.5);
+      TLine* lineSignal2 = new TLine(massSignal2, 0, massSignal2, hMData->GetMaximum()*0.5);
+      TLine* lineSideBand1 = new TLine(massSideBand1, 0, massSideBand1, hMData->GetMaximum()*0.5);
+      TLine* lineSideBand2 = new TLine(massSideBand2, 0, massSideBand2, hMData->GetMaximum()*0.5);
+      TLine* lineSideBand3 = new TLine(massSideBand3, 0, massSideBand3, hMData->GetMaximum()*0.5);
+      TLine* lineSideBand4 = new TLine(massSideBand4, 0, massSideBand4, hMData->GetMaximum()*0.5);
+      lineSignal1->Draw();
+      lineSignal2->Draw();
+      lineSideBand1->Draw();
+      lineSideBand2->Draw();
+      lineSideBand3->Draw();
+      lineSideBand4->Draw();
+
+      c2->cd(2);
       gPad->SetLogy();
 
       hData->GetXaxis()->SetRange(i,i);
@@ -182,8 +221,11 @@ void bFeedDownFraction()
 
       TH1D* hD0DcaData0 = (TH1D*)hData->Project3D("y")->Clone("hD0DcaData0");
       TH1D* hD0DcaSideband = (TH1D*)hSideband->Project3D("y")->Clone("hD0DcaSideband");
-      hD0DcaMCPSignal = (TH1D*)hMCPSignal->Project3D("y")->Clone("hD0DcaMCPSignal");
-      hD0DcaMCNPSignal = (TH1D*)hMCNPSignal->Project3D("y")->Clone("hD0DcaMCNPSignal");
+      TH1D* hD0DcaMCPSignal0 = (TH1D*)hMCPSignal->Project3D("y")->Clone("hD0DcaMCPSignal0");
+      TH1D* hD0DcaMCNPSignal0 = (TH1D*)hMCNPSignal->Project3D("y")->Clone("hD0DcaMCNPSignal0");
+
+      hD0DcaMCPSignal = hD0DcaMCPSignal0;
+      hD0DcaMCNPSignal = hD0DcaMCNPSignal0;
 
       divideBinWidth(hD0DcaData0);
       divideBinWidth(hD0DcaSideband);
@@ -194,12 +236,13 @@ void bFeedDownFraction()
       TH1D* hD0DcaSideband0 = (TH1D*)hD0DcaSideband->Clone("hD0DcaSideband0");
       hD0DcaSideband->Scale(scaleSideBand);
 
-      TH1D* hD0DcaData = (TH1D*)hD0DcaData0->Clone("hD0DcaData");
-      hD0DcaData->Add(hD0DcaSideband,-1);
+      TH1D* hD0DcaDataSubSideBand = (TH1D*)hD0DcaData0->Clone("hD0DcaDataSubSideBand");
+      hD0DcaDataSubSideBand->Add(hD0DcaSideband,-1);
 
       hD0DcaData0->SetMarkerSize(0.6);
       hD0DcaData0->Draw();
       hD0DcaSideband->Draw("hsame");
+      hD0DcaSideband0->SetLineStyle(2);
       hD0DcaSideband0->Draw("hsame");
 
       TLegend* leg1 = new TLegend(0.44,0.6,0.90,0.76,NULL,"brNDC");
@@ -208,14 +251,62 @@ void bFeedDownFraction()
       leg1->SetTextFont(42);
       leg1->SetFillStyle(0);
       leg1->AddEntry(hD0DcaData0,"D^{0} candidate","pl");
-      leg1->AddEntry(hD0DcaSideband,"side band background","l");
+      leg1->AddEntry(hD0DcaSideband,"side band","l");
+      leg1->AddEntry(hD0DcaSideband0,"side band unscaled","l");
       leg1->Draw("same");
 
       texCms->Draw();
       texCol->Draw();
       texPtY->Draw();
 
-      c1->cd(3);
+      c2->SaveAs(Form("plots/PbPb_%.0f_%.0f_sideBand.pdf",ptLow,ptHigh));
+
+      c15->cd(1);
+      
+      fitMass(hMData, hMMCSignal, hMMCSwapped);
+
+      texPt->Draw();
+      texY->Draw();
+
+      TH1D* hD0DcaDataFit = new TH1D("hD0DcaDataFit", ";D^{0} DCA (cm);yield per cm", nBinY, binsY);
+
+      for(int j=1; j<=14; j++)
+	{
+	  c15->cd(j+1);
+	  hPtMD0Dca->GetZaxis()->SetRange(j,j);
+          float D0DcaLow = hPtMD0Dca->GetZaxis()->GetBinLowEdge(j);
+	  float D0DcaHigh = hPtMD0Dca->GetZaxis()->GetBinUpEdge(j);
+	  TH1D* hMData_D0Dca = (TH1D*)hPtMD0Dca->Project3D("y")->Clone(Form("hM_pt_%1.1f_%1.1f_D0Dca_%1.4f_%1.4f", ptLow, ptHigh, D0DcaLow, D0DcaHigh));
+	  setColorTitleLabel(hMData_D0Dca);
+	  fMass = fitMass(hMData_D0Dca, hMMCSignal, hMMCSwapped);
+
+	  float yield = fMass->GetParameter(0)*fMass->GetParameter(7)/hMData_D0Dca->GetBinWidth(1);
+	  float yieldError = fMass->GetParError(0)*fMass->GetParameter(7)/hMData_D0Dca->GetBinWidth(1);
+
+	  hD0DcaDataFit->SetBinContent(j, yield);
+	  hD0DcaDataFit->SetBinError(j, yieldError);
+
+	  TLatex* texD0Dca = new TLatex(0.18,0.82,Form("D^{0} DCA: %1.4f - %1.4f",D0DcaLow,D0DcaHigh));
+	  texD0Dca->SetNDC();
+	  texD0Dca->SetTextFont(42);
+	  texD0Dca->SetTextSize(0.06);
+	  texD0Dca->SetLineWidth(2);
+	  texD0Dca->Draw();
+
+          TLatex* texYield = new TLatex(0.18,0.74,Form("D^{0} yield: %1.0f #pm %1.0f",yield,yieldError));
+          texYield->SetNDC();
+          texYield->SetTextFont(42);
+          texYield->SetTextSize(0.06);
+          texYield->SetLineWidth(2);
+          texYield->Draw();
+
+	}
+
+      c15->SaveAs(Form("plots/PbPb_%.0f_%.0f_invMassFit.pdf",ptLow,ptHigh));
+
+      divideBinWidth(hD0DcaDataFit);
+
+      c4->cd(1);
       gPad->SetLogy();
  
       normalize(hD0DcaMCPSignal);
@@ -234,7 +325,7 @@ void bFeedDownFraction()
       leg2->AddEntry(expMCPSignal,"Fit","l");
       leg2->Draw("same");
 
-      c1->cd(4);
+      c4->cd(2);
       gPad->SetLogy();
       
       normalize(hD0DcaMCNPSignal);
@@ -253,8 +344,13 @@ void bFeedDownFraction()
       leg3->AddEntry(expMCNPSignal,"Fit","l");
       leg3->Draw("same");
 
-      c1->cd(5);
+      c4->cd(3);
       gPad->SetLogy();
+
+      TH1D* hD0DcaData = hD0DcaDataFit;
+      if(i>5) hD0DcaData = hD0DcaDataSubSideBand;
+
+      setColorTitleLabel(hD0DcaData, 1);
 
       double integralTotalYield = hD0DcaData->Integral(1,hD0DcaData->GetXaxis()->GetNbins(),"width");
       cout<<"integralTotalYield: "<<integralTotalYield<<endl;
@@ -339,14 +435,12 @@ void bFeedDownFraction()
       leg4->AddEntry(fNP,"Non-Prompt D^{0}","f");
       leg4->Draw("same");
 
-      if(i==5) return;
-
       //smear MC smaple with the error, to simulate the MC statistic error effect.
-      c1->cd(6);
+      c4->cd(4);
       gPad->SetLogy();
 
-      TH1D* hD0DcaMCPSignal0 = (TH1D*)hD0DcaMCPSignal->Clone("hMCPSignal0");
-      TH1D* hD0DcaMCNPSignal0 = (TH1D*)hD0DcaMCNPSignal->Clone("hMCNPSignal0");
+      hD0DcaMCPSignal = (TH1D*)hD0DcaMCPSignal0->Clone("hMCPSignal");
+      hD0DcaMCNPSignal = (TH1D*)hD0DcaMCNPSignal0->Clone("hMCNPSignal");
       
       TH1D* hPromptRatio = new TH1D("hPromptRatio", "hPromptRatio", 100, 0, 1);
       setColorTitleLabel(hPromptRatio, 1);
@@ -394,9 +488,9 @@ void bFeedDownFraction()
       bToDYieldError[i-1] = bToDYield[i-1]*sqrt(pow(promptFractionError[i-1]/(1-promptFraction[i-1]),2) + pow(totalYieldError[i-1]/totalYield[i-1],2));
       cout<<"B to D yield: "<<bToDYield[i-1]<<" +- "<<bToDYieldError[i-1]<<endl;
 
-      c1->SaveAs(Form("plots/PbPb_%.0f_%.0f_fit.pdf",ptLow,ptHigh));
+      c4->SaveAs(Form("plots/PbPb_%.0f_%.0f_fit.pdf",ptLow,ptHigh));
 
-      c2->cd();
+      c1->cd();
 
       TH1D* hD0DcaDataOverFit = (TH1D*)hD0DcaData->Clone("hD0DcaDataOverFit");
       hD0DcaDataOverFit->Divide(fMix);
@@ -410,10 +504,10 @@ void bFeedDownFraction()
       fLine1->Draw("same");
       hD0DcaDataOverFit->Draw("esame");
       
-      c2->SaveAs(Form("plots/PbPb_%.0f_%.0f_ratio.pdf",ptLow,ptHigh));
+      c1->SaveAs(Form("plots/PbPb_%.0f_%.0f_ratio.pdf",ptLow,ptHigh));
     }
 
-  c2->cd();
+  c1->cd();
 
   TH1D* hStupidJie = new TH1D("hStupidJie", "", 100, 0, 100);
   hStupidJie->GetYaxis()->SetRangeUser(0,1);
@@ -422,10 +516,12 @@ void bFeedDownFraction()
   hStupidJie->SetStats(0);
   hStupidJie->Draw();
   TGraphErrors* grFraction = new TGraphErrors(nPtBins, pts, promptFraction, 0, promptFractionError);
+  grFraction->SetName("grPromptFraction");
   grFraction->SetMarkerStyle(20);
   grFraction->Draw("psame");
 
   TGraphErrors* grFraction2 = new TGraphErrors(nPtBins, pts, promptFraction, 0, promptFractionErrorDataOnly);
+  grFraction2->SetName("grPromptFractionErrorFromRealDataOnly");
   grFraction2->SetMarkerStyle(20);
   grFraction2->SetMarkerColor(4);
   grFraction2->SetLineColor(4);
@@ -440,22 +536,30 @@ void bFeedDownFraction()
   leg->AddEntry(grFraction2, "statistic error from real data only", "l");
   leg->Draw();
 
-  c2->SaveAs("promptFraction.pdf");
+  c1->SaveAs("promptFraction.pdf");
 
-  c2->SetLogy();
+  c1->SetLogy();
   float ptBins[nPtBins+1] = {2,6,8,10,15,20,25,35,50,100};
   TH1D* hBtoDRawYield = new TH1D("hBtoDRawYield", ";p_{T} (GeV/c);counts per GeV/c", nPtBins, ptBins);
   for(int i=1; i<=nPtBins; i++)
     {
+      if(bToDYield[i-1] <= 0) continue;
       hBtoDRawYield->SetBinContent(i, bToDYield[i-1]);
       hBtoDRawYield->SetBinError(i, bToDYieldError[i-1]);
     }
   divideBinWidth(hBtoDRawYield);
   setColorTitleLabel(hBtoDRawYield, 1);
-  c2->SetBottomMargin(0.14);
+  c1->SetBottomMargin(0.14);
   hBtoDRawYield->Draw("p");
   
-  c2->SaveAs("BtoD.pdf");
+  c1->SaveAs("BtoD.pdf");
+
+  TFile* fOut = new TFile("bFeedDownResult.root", "recreate");
+  fOut->WriteTObject(grFraction);
+  fOut->WriteTObject(grFraction2);
+  fOut->WriteTObject(hBtoDRawYield);
+  fOut->Write();
+  fOut->Close();
 }
 
 Double_t funMix(Double_t* x_, Double_t* para)
@@ -539,7 +643,7 @@ TF1* fitMass(TH1D* hData, TH1D* hMCSignal, TH1D* hMCSwapped)
 
   TF1* f = new TF1("fMass","[0]*([7]*([9]*Gaus(x,[1],[2]*(1+[11]))/(sqrt(2*3.14159)*[2]*(1+[11]))+(1-[9])*Gaus(x,[1],[10]*(1+[11]))/(sqrt(2*3.14159)*[10]*(1+[11])))+(1-[7])*Gaus(x,[1],[8]*(1+[11]))/(sqrt(2*3.14159)*[8]*(1+[11])))+[3]+[4]*x+[5]*x*x+[6]*x*x*x", 1.7, 2.0);
   f->SetParLimits(4,-1000,1000);
-  f->SetParLimits(10,0.001,0.05);
+  f->SetParLimits(10,0.005,0.05);
   f->SetParLimits(2,0.01,0.1);
   f->SetParLimits(8,0.02,0.2);
   f->SetParLimits(7,0,1);
@@ -594,7 +698,7 @@ TF1* fitMass(TH1D* hData, TH1D* hMCSignal, TH1D* hMCSwapped)
   f->ReleaseParameter(1);
   f->SetParLimits(1,1.86,1.87);
   f->ReleaseParameter(11);
-  f->SetParLimits(11,-1.,1.);
+  f->SetParLimits(11,-0.2,0.2);
   hData->Fit("fMass","L q","",minhisto,maxhisto);
   hData->Fit("fMass","L q","",minhisto,maxhisto);
   hData->Fit("fMass","L q","",minhisto,maxhisto);
@@ -637,8 +741,8 @@ TF1* fitMass(TH1D* hData, TH1D* hMCSignal, TH1D* hMCSwapped)
 
   hData->SetXTitle("m_{#piK} (GeV/c^{2})");
   hData->SetYTitle("Entries / (5 MeV/c^{2})");
-  hData->SetAxisRange(0,hData->GetMaximum()*1.4*1.2,"Y");
-  hData->SetMarkerSize(0.6);
+  hData->SetAxisRange(0,hData->GetBinContent(hData->GetMaximumBin())*1.4*1.2,"Y");
+  hData->SetMarkerSize(0.3);
   hData->Draw("e");
 
   cout<<"hData->GetMaximum(): "<<hData->GetMaximum()<<endl;
@@ -653,7 +757,7 @@ TF1* fitMass(TH1D* hData, TH1D* hMCSignal, TH1D* hMCSwapped)
   Double_t yield = mass->Integral(minhisto,maxhisto)/hData->GetBinWidth(1);
   Double_t yieldErr = mass->Integral(minhisto,maxhisto)/hData->GetBinWidth(1)*mass->GetParError(0)/mass->GetParameter(0);
 
-  std::cout<<"YIELD="<<yield<<std::endl;
+  std::cout<<"integral function yield: "<<yield<<"    fit yield: "<<f->GetParameter(0)*f->GetParameter(7)/hData->GetBinWidth(1)<<" +- "<<f->GetParError(0)*f->GetParameter(7)/hData->GetBinWidth(1)<<std::endl;
 
   TLegend* leg = new TLegend(0.65,0.5,0.82,0.88,NULL,"brNDC");
   leg->SetBorderSize(0);
@@ -671,5 +775,5 @@ TF1* fitMass(TH1D* hData, TH1D* hMCSignal, TH1D* hMCSwapped)
   TH1D* hDataNoFitFun = (TH1D*) hData->Clone("hDataNoFitFun");
   hDataNoFitFun->Draw("esame");
 
-  return fMass;
+  return f;
 }

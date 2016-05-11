@@ -61,18 +61,18 @@ void projectPbPbMBMC()
 
   TH3D* hMCPSignal = new TH3D("hMCPSignal",";p_{T} (GeV/c);D0 DCA (cm);flight distance significance",nBinX,binsX,nBinY,binsY,nBinZ,binsZ);
   TH3D* hMCNPSignal = new TH3D("hMCNPSignal",";p_{T} (GeV/c);D0 DCA (cm);flight distance significance",nBinX,binsX,nBinY,binsY,nBinZ,binsZ);
-  TH2D* hPtMMCPSignal = new TH2D("hPtMMCPSignal",";p_{T} (GeV/c);m (GeV/c^{2})",nBinX,binsX,nBinM,binsM);
-  TH2D* hPtMMCPSwapped = new TH2D("hPtMMCPSwapped",";p_{T} (GeV/c);m (GeV/c^{2})",nBinX,binsX,nBinM,binsM);
+  TH3D* hPtMD0DcaMCPSignal = new TH3D("hPtMD0DcaMCPSignal",";p_{T} (GeV/c);m (GeV/c^{2});D^{0} DCA (cm)",nBinX,binsX,nBinM,binsM,nBinY,binsY);
+  TH3D* hPtMD0DcaMCPSwapped = new TH3D("hPtMD0DcaMCPSwapped",";p_{T} (GeV/c);m (GeV/c^{2});D^{0} DCA (cm)",nBinX,binsX,nBinM,binsM,nBinY,binsY);
   
   hMCPSignal->Sumw2();
   hMCNPSignal->Sumw2();
-  hPtMMCPSignal->Sumw2();
-  hPtMMCPSwapped->Sumw2();
+  hPtMD0DcaMCPSignal->Sumw2();
+  hPtMD0DcaMCPSwapped->Sumw2();
   
   tMCP->Draw("DsvpvDistance/DsvpvDisErr:DsvpvDistance*sin(Dalpha):Dpt>>hMCPSignal",weightfunctionreco*(cutpt&&cutPbPbMB&&cutSignal&&cutmc));
   tMCNP->Draw("DsvpvDistance/DsvpvDisErr:DsvpvDistance*sin(Dalpha):Dpt>>hMCNPSignal",weightfunctionreco*(cutpt&&cutPbPbMB&&cutSignal&&cutmc));
-  tMCP->Draw("Dmass:Dpt>>hPtMMCPSignal",weightfunctionreco*(cutpt&&cutPbPbMB&&cutmcSignal));
-  tMCP->Draw("Dmass:Dpt>>hPtMMCPSwapped",weightfunctionreco*(cutpt&&cutPbPbMB&&cutmcSwapped));
+  tMCP->Draw("DsvpvDistance*sin(Dalpha):Dmass:Dpt>>hPtMD0DcaMCPSignal",weightfunctionreco*(cutpt&&cutPbPbMB&&cutmcSignal));
+  tMCP->Draw("DsvpvDistance*sin(Dalpha):Dmass:Dpt>>hPtMD0DcaMCPSwapped",weightfunctionreco*(cutpt&&cutPbPbMB&&cutmcSwapped));
   
   outf->Write();
 }

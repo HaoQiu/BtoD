@@ -52,15 +52,15 @@ void projectPbPbMB()
 
   TH3D* hSideband = new TH3D("hSideband",";p_{T} (GeV/c};D0 DCA (cm);flight distance significance",nBinX,binsX,nBinY,binsY,nBinZ,binsZ);
   TH3D* hData = new TH3D("hData",";p_{T} (GeV/c};D0 DCA (cm);flight distance significance",nBinX,binsX,nBinY,binsY,nBinZ,binsZ);
-  TH2D* hPtM = new TH2D("hPtM",";p_{T} (GeV/c);m (GeV/c^{2})",nBinX,binsX,nBinM,binsM);
+  TH3D* hPtMD0Dca = new TH3D("hPtMD0Dca",";p_{T} (GeV/c);m (GeV/c^{2});D^{0} DCA (cm)",nBinX,binsX,nBinM,binsM,nBinY,binsY);
   
   hSideband->Sumw2();
   hData->Sumw2();
-  hPtM->Sumw2();
+  hPtMD0Dca->Sumw2();
   
   chData->Draw("DsvpvDistance/DsvpvDisErr:DsvpvDistance*sin(Dalpha):Dpt>>hSideband",cutpt&&cutPbPbMB&&cutSideband);
   chData->Draw("DsvpvDistance/DsvpvDisErr:DsvpvDistance*sin(Dalpha):Dpt>>hData",cutpt&&cutPbPbMB&&cutSignal);
-  chData->Draw("Dmass:Dpt>>hPtM",cutpt&&cutPbPbMB);
+  chData->Draw("DsvpvDistance*sin(Dalpha):Dmass:Dpt>>hPtMD0Dca",cutpt&&cutPbPbMB);
   
   outf->Write();
 }
